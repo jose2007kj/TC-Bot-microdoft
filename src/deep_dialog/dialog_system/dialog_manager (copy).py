@@ -34,7 +34,6 @@ class DialogManager:
         if dialog_config.run_mode < 3:
             print ("New episode, user goal:")
             print json.dumps(self.user.goal, indent=2)
-	print("kj#####")
         self.print_function(user_action = self.user_action)
             
         self.agent.initialize_episode()
@@ -61,8 +60,7 @@ class DialogManager:
         ########################################################################
         self.sys_action = self.state_tracker.dialog_history_dictionaries()[-1]
         self.user_action, self.episode_over, dialog_status = self.user.next(self.sys_action)
-	print("episode,status",self.episode_over,dialog_status)        
-	self.reward = self.reward_function(dialog_status)
+        self.reward = self.reward_function(dialog_status)
         
         ########################################################################
         #   Update state tracker with latest user action
@@ -123,7 +121,6 @@ class DialogManager:
             elif dialog_config.run_mode == 1: 
                 print ("Turn %s usr: %s, inform_slots: %s, request_slots: %s" % (user_action['turn'], user_action['diaact'], user_action['inform_slots'], user_action['request_slots']))
             elif dialog_config.run_mode == 2: # debug mode, show both
-		print(user_action)
                 print ("Turn %d usr: %s, inform_slots: %s, request_slots: %s" % (user_action['turn'], user_action['diaact'], user_action['inform_slots'], user_action['request_slots']))
                 print ("Turn %d usr: %s" % (user_action['turn'], user_action['nl']))
             

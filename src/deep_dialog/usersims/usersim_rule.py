@@ -43,7 +43,7 @@ class RuleSimulator(UserSimulator):
         state['history_slots']: keeps all the informed_slots
         state['rest_slots']: keep all the slots (which is still in the stack yet)
         """
-        
+        print("*************")
         self.state = {}
         self.state['history_slots'] = {}
         self.state['inform_slots'] = {}
@@ -63,8 +63,12 @@ class RuleSimulator(UserSimulator):
         #self.debug_falk_goal()
         
         # sample first action
-        user_action = self._sample_action()
+        # user_action = self._sample_action() #by jose
         assert (self.episode_over != 1),' but we just started'
+        nl=raw_input("kj:Please enter your question related to movie booking:")
+        user_action=self.nlu_model.generate_dia_act(nl) 
+        user_action['turn'] = 0
+        user_action['nl'] = nl
         return user_action  
         
     def _sample_action(self):
@@ -202,10 +206,23 @@ class RuleSimulator(UserSimulator):
         response_action['request_slots'] = self.state['request_slots']
         response_action['turn'] = self.state['turn']
         response_action['nl'] = ""
-        
+        print ("response",response_action)
         # add NL to dia_act
-        self.add_nl_to_action(response_action)                       
-        return response_action, self.episode_over, self.dialog_status
+        self.add_nl_to_action(response_action)
+        nl=raw_input("")
+        user_action=self.nlu_model.generate_dia_act(nl)
+        user_action['turn'] = self.state['turn']
+        user_action['nl'] = nl
+        # if "sorry bye" in nl:
+        #     self.dialog_status = -1
+        # elif "thankyou bye" in nl:
+        #     self.dialog_status = 1
+        # else:
+        #     self.dialog_status = 0
+
+        # self.episode_over= raw_input("kj:Please enter True or False for episone end")                  
+        print(type(False),type(self.episode_over))
+        return user_action, self.episode_over, self.dialog_status
     
     
     def response_confirm_answer(self, system_action):
